@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Category: {{ category.name }}{% endblock %}
+
+{% block content %}
+
+    <div class="main-content common-page clearfix">
+        <div class="categorys-item">
+            <div class="common-title">
+                分类 : {{ category.name }}
+            </div>
+            {% if posts %}
+                <div class="post-lists">
+                    <div class="post-lists-body">
+                        {% for post in posts %}
+                            <div class="post-list-item">
+                                <div class="post-list-item-container ">
+                                    <div class="item-label ">
+                                        <div class="item-title">
+                                            <a href="{{ url_for('.show_post', postid=post.id) }}">{{ post.title }}</a>
+                                        </div>
+                                        <div class="item-meta clearfix">
+                                            <div class="item-meta-ico {{ post.id | id2icon }}"
+                                                 style="background: url({{ url_for('static', filename='img/bg-ico.png') }}) no-repeat;
+                                                         background-size: 40px auto;">
+                                            </div>
+                                            <div class="item-meta-date">发布于 {{ post.created | fmtdate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="lists-navigator clearfix">
+                {% import "macro/pagination.html" as macro_pagination %}
+                {{macro_pagination.pagination_widget(pagination,'blog.category', cate=category.name)}}
+    </div>
+            {% else %}
+                <div>
+                    <p>抱歉，还没有相关文章.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

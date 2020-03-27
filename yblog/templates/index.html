@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}首页 - Luocy`s Blog{% endblock %}
+
+{% block content %}
+
+<div class="main-content index-page clearfix">
+    <div class="post-lists">
+        <div class="post-lists-body">
+        {%for post in posts %}
+            <div class="post-list-item">
+                <div class="post-list-item-container">
+                    <a class="item-thumb  bg-deepgrey" href="{{ url_for('.show_post', postid=post.id) }}"
+                       style="background-image:url({{ url_for('static', filename='img/rand/' + id2bg(post.id)) }});">
+                        <dir class="item-desc">{{ post.tags }}</dir>
+                    </a>
+                    <div class="item-slant reverse-slant &lt; bg-deepgrey"></div>
+                    <div class="item-slant"></div>
+                    <div class="item-label">
+                        <div class="item-title"><a href="{{ url_for('.show_post', postid=post.id) }}">{{ post.title }}</a>
+                        </div>
+                        <div class="item-meta clearfix">
+                            <div class="item-meta-ico {{ post.id | id2icon }}"
+                                 style="background: url({{ url_for('static', filename='img/bg-ico.png') }}) no-repeat;background-size: 40px auto;"></div>
+                            <div class="item-meta-cat"><a href={{ url_for('.category', cate=post.category.name) }}>{{ post.category.name }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        </div>
+    </div>
+
+    <div class="lists-navigator clearfix">
+        {% if posts %}
+            {% import "macro/pagination.html" as macro_pagination %}
+            {{macro_pagination.pagination_widget(pagination,'blog.index')}}
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
+        <meta name="renderer" content="webkit"/>
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta http-equiv="Cache-Control" content="no-transform"/>
+        <meta http-equiv="Cache-Control" content="no-siteapp"/>
+        <meta name="keywords"/>
+        <meta name="description"/>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}"/>
+        <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}"/>
+
+        <title>
+            {% block title %}
+            {% endblock title %}
+        </title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/zoomify.min.css') }}"/>
+        <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.9.0/styles/xcode.min.css"/>
+        <script src="//cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
+        <script src="{{ url_for('static', filename='js/zoomify.min.js') }}"></script>
+
+        <!--[if lt IE 9]>
+        <script src="//cdn.bootcss.com/html5shiv/r29/html5.min.js"></script>
+        <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    {% endblock head %}
+</head>
+<body gtools_scp_screen_capture_injected="true" class="bg-grey">
+<!--[if lt IE 8]>
+<div class="browsehappy" role="dialog">
+    当前网页 <strong>不支持</strong> 你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/"
+                                                       target="_blank">升级你的浏览器</a>。
+</div>
+<![endif]-->
+
+{% include "header.html" %}
+
+{% block content %}
+{% endblock content %}
+
+{% include "footer.html" %}
+
+<script src="//cdn.bootcss.com/headroom/0.9.1/headroom.min.js"></script>
+<script>
+    $('#search-inp').keypress(function (e) {
+        const key = e.which; //e.which是按键的值
+        if (key === 13) {
+            const q = $(this).val();
+            if (q && q !== '') {
+                window.location.href = '/search/' + q;
+            }
+        }
+    });
+    (function () {
+        let OriginTitile = document.title, titleTime;
+        document.addEventListener('visibilitychange', function () {
+            if (document.hidden) {
+                document.title = 'Luocy`s Blog';
+                clearTimeout(titleTime);
+            } else {
+                document.title = 'Welcome Back! ╮(╯▽╰)╭';
+                titleTime = setTimeout(function () {
+                    document.title = OriginTitile;
+                }, 2000);
+            }
+        });
+    })();
+    var header = new Headroom(document.getElementById("header"), {
+        tolerance: 10,
+        offset: 80,
+        classes: {
+            initial: "animated",
+            pinned: "slideDown",
+            unpinned: "slideUp"
+        }
+    });
+    header.init();
+</script>
+
+</body>
+</html>
+

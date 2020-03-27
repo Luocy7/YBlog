@@ -1,0 +1,27 @@
+<header id="header" class="header bg-white">
+    <div class="navbar-container">
+        <a class="navbar-logo" href="{{ url_for('blog.index') }}">
+            <img alt="首页" src="{{ url_for('static', filename='img/logo.png') }}"/>
+        </a>
+        <div class="navbar-menu">
+            <a href="{{ url_for('blog.archives') }}">归档</a>
+            <a href="{{ url_for('blog.about') }}">关于</a>
+        </div>
+        <div class="navbar-search" onclick="">
+            <span class="icon-search"></span>
+            <form role="search" onsubmit="return false;">
+                <span class="search-box">
+                    <input type="text" id="search-inp" class="input" placeholder="搜索..." maxlength="30"
+                           autocomplete="off"/>
+                </span>
+            </form>
+        </div>
+        <div class="navbar-mobile-menu" onclick="">
+            <span class="icon-menu cross"><span class="middle"></span></span>
+            <ul>
+                <li><a href="{{ url_for('blog.archives') }}">归档</a></li>
+                <li><a href="{{ url_for('blog.about') }}">关于</a></li>
+            </ul>
+        </div>
+    </div>
+</header>

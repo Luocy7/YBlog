@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Archives - Luocy`s Blog{% endblock %}
+
+{% block content %}
+
+    <div class="main-content archive-page clearfix">
+        <div class="categorys-item">
+            {% for archive_date, archive_posts in archives.items() %}
+                <div class="categorys-title">{{ archive_date }}</div>
+                <div class="post-lists">
+                    <div class="post-lists-body">
+                        {% for post in archive_posts %}
+                            <div class="post-list-item">
+                                <div class="post-list-item-container">
+                                    <div class="item-label">
+                                        <div class="item-title">
+                                            <a href="{{ url_for('.show_post', postid=post.id) }}">{{ post.title }}</a>
+                                        </div>
+                                        <div class="item-meta clearfix">
+                                            <div class="item-meta-date">发布于 {{ post.created | fmtdate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
