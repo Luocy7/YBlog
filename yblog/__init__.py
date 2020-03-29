@@ -19,7 +19,6 @@ from flask_sqlalchemy import get_debug_queries
 from yblog.views.blog import blog_bp
 from yblog.views.auth import auth_bp
 from yblog.views.admin import admin_bp
-from yblog.views.webhook import yblg_github_moniter
 
 from yblog.extensions import db, login_manager, csrf, mail, toolbar, migrate, md, cache
 from yblog.database.models import Admin, Post, Category, Site, Link, Visit
@@ -29,6 +28,8 @@ basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 cfg = os.getenv('FLASK_CONFIG', 'dev')
 platforms.C_FORCE_ROOT = True
 
+celery = Celery(__name__, broker='')
+
 
 def create_app(config_name=None):
     config_name = config_name or cfg
@@ -37,6 +38,7 @@ def create_app(config_name=None):
 
     app.config.from_object(config[config_name])
 
+    register_celery(app)
     register_logging(app)
     register_extensions(app)
     register_urlrule(app)
@@ -47,25 +49,19 @@ def create_app(config_name=None):
     register_template_filter(app)
     register_template_context(app)
     register_request_handlers(app)
-    celery_instance = make_celery(app)
 
     return app
 
 
-def make_celery(app):
-    celery = Celery(__name__, broker=app.config['CELERY_BROKER_URL'])
+def register_celery(app):
     celery.config_from_object('yblog.config.celery_cfg')
-    TaskBase = celery.Task
 
-    class ContextTask(TaskBase):
-        abstract = True
-
+    class ContextTask(celery.Task):
         def __call__(self, *args, **kwargs):
             with app.app_context():
-                return TaskBase.__call__(self, *args, **kwargs)
+                return self.run(*args, **kwargs)
 
     celery.Task = ContextTask
-    return celery
 
 
 def register_logging(app):
@@ -127,6 +123,7 @@ def register_urlrule(app):
     def index():
         return redirect(url_for("blog.index"), code=301)
 
+    from yblog.views.webhook import yblg_github_moniter
     app.add_url_rule('/blog/yblg-github-moniter', view_func=yblg_github_moniter, methods=['POST'])
 
     app.register_blueprint(blog_bp, url_prefix='/blog')

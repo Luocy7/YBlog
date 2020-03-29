@@ -14,7 +14,7 @@ if os.path.exists(dotenv_path):
 
 from yblog import create_app
 
-app = create_app('prd')
+app = create_app('dev')
 
 if __name__ == '__main__':
     app.run(port=8080)

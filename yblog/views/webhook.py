@@ -10,6 +10,7 @@ import hashlib
 from flask import request, current_app, abort, jsonify
 from yblog.extensions import csrf
 from yblog.utils.RestResUtil import RestResponse
+from yblog.task.task import git_action
 
 
 @csrf.exempt
@@ -24,7 +25,7 @@ def yblg_github_moniter():
         digest = hmac.new(github_webhook_secret,
                           request.data, hashlib.sha1).hexdigest()
         verify_signature = "sha1=" + digest
-        current_app.logger.info("github request signature: {}".format(verify_signature))
+        task = git_action.delay()
 
         # Verify signature
         if not hmac.compare_digest(signature, verify_signature):
