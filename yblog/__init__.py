@@ -17,6 +17,7 @@ from flask_sqlalchemy import get_debug_queries
 from yblog.views.blog import blog_bp
 from yblog.views.auth import auth_bp
 from yblog.views.admin import admin_bp
+from yblog.views.webhook import yblg_github_moniter
 
 from yblog.extensions import db, login_manager, csrf, mail, toolbar, migrate, md, cache
 from yblog.common.models import Admin, Post, Category, Site, Link, Visit
@@ -35,7 +36,7 @@ def create_app(config_name=None):
 
     register_logging(app)
     register_extensions(app)
-    register_blueprints(app)
+    register_urlrule(app)
     register_commands(app)
     register_errors(app)
     reqister_ddl_events(app)
@@ -100,10 +101,12 @@ def register_extensions(app):
     analytis.init_app(app)
 
 
-def register_blueprints(app):
+def register_urlrule(app):
     @app.route("/")
     def index():
         return redirect(url_for("blog.index"), code=301)
+
+    app.add_url_rule('/blog/yblg-github-moniter', view_func=yblg_github_moniter, methods=['POST'])
 
     app.register_blueprint(blog_bp, url_prefix='/blog')
     app.register_blueprint(auth_bp, url_prefix='/auth')
