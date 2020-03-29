@@ -67,9 +67,9 @@ def register_logging(app):
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
     file_handler = RotatingFileHandler(os.path.join(basedir, 'logs/yblog.log'),
-                                       maxBytes=10 * 1024 * 1024, backupCount=10)
+                                       maxBytes=10 * 1024 * 1024, backupCount=10, encoding='utf-8')
     file_handler.setFormatter(formatter)
-    file_handler.setLevel(logging.NOTSET)
+    file_handler.setLevel(logging.INFO)
 
     mail_handler = SMTPHandler(
         mailhost=app.config['MAIL_SERVER'],

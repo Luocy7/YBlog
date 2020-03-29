@@ -114,10 +114,11 @@ def yblg_github_moniter():
         github_webhook_secret = current_app.config['GITHUB_WEBHOOK_SECRET'].encode("utf-8")
         digest = hmac.new(github_webhook_secret,
                           request.data, hashlib.sha1).hexdigest()
-        print(digest)
+        verify_signature = "sha1=" + digest
+        current_app.logger.info("github request signature: {}".format(verify_signature))
 
         # Verify signature
-        if not hmac.compare_digest(signature, "sha1=" + digest):
+        if not hmac.compare_digest(signature, verify_signature):
             abort(400, "Invalid signature")
 
         request_data = request.get_json()
