@@ -23,6 +23,8 @@ class YblogCfg(object):
     YBLOG_SLOW_QUERY_THRESHOLD = 1
     YBLOG_AUTO_INCREMENT_VALUE = 10086
 
+    GITHUB_WEBHOOK_SECRET = 'luocysocool'
+
 
 class Config(YblogCfg):
     DEBUG = False
