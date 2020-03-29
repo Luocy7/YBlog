@@ -1,3 +1,10 @@
+# -*- coding:utf-8 _*-
+"""
+    @author: Luocy
+    @time: 2020/03/17
+    @copyright: © 2020 Luocy <luocy77@gmail.com>
+"""
+
 from yblog.extensions import db
 from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash

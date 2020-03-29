@@ -1,12 +1,15 @@
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 _*-
+"""
+    @author: Luocy
+    @time: 2020/03/29
+    @copyright: © 2020 Luocy <luocy77@gmail.com>
+"""
 
 import os
 import click
 
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
-
-from celery import Celery
 
 from flask import Flask, render_template, has_request_context, request, redirect, url_for
 from flask_sqlalchemy import get_debug_queries
@@ -15,16 +18,12 @@ from yblog.views.blog import blog_bp
 from yblog.views.auth import auth_bp
 from yblog.views.admin import admin_bp
 
-from yblog.extensions import db, login_manager, csrf, mail, toolbar, \
-    migrate, md, redis_client, cache
+from yblog.extensions import db, login_manager, csrf, mail, toolbar, migrate, md, cache
 from yblog.common.models import Admin, Post, Category, Site, Link, Visit
 from yblog.config.base_settings import config
-from yblog.config.celeryconfig import broker_url
-celery = Celery(__name__, broker=broker_url)
-celery.config_from_object('yblog.config.celeryconfig')
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-cfg = os.getenv('FLASK_CONFIG', 'default')
+cfg = os.getenv('FLASK_CONFIG', 'dev')
 
 
 def create_app(config_name=None):
@@ -34,7 +33,6 @@ def create_app(config_name=None):
 
     app.config.from_object(config[config_name])
 
-    register_celery(app)
     register_logging(app)
     register_extensions(app)
     register_blueprints(app)
@@ -46,16 +44,6 @@ def create_app(config_name=None):
     register_template_context(app)
     register_request_handlers(app)
     return app
-
-
-def register_celery(app):
-
-    class ContextTask(celery.Task):
-        def __call__(self, *args, **kwargs):
-            with app.app_context():
-                return self.run(*args, **kwargs)
-
-    celery.Task = ContextTask
 
 
 def register_logging(app):
@@ -107,7 +95,6 @@ def register_extensions(app):
     csrf.init_app(app)
     migrate.init_app(app, db)
     md.init_app(app)
-    redis_client.init_app(app)
     cache.init_app(app)
     from yblog.utils.analytis import analytis
     analytis.init_app(app)
@@ -233,7 +220,7 @@ def register_commands(app):
     @click.option('--drop', is_flag=True, help='Create after drop.')
     def inject(drop):
         """inject data into database."""
-        from Notable.MdFileTools import insert_cate, insert_tag, insert_blogs
+        from notes.MdFileTools import insert_cate, insert_tag, insert_blogs
 
         if drop:
             click.confirm('This operation will delete the database, do you want to continue?', abort=True)

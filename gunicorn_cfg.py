@@ -13,9 +13,9 @@ gevent.monkey.patch_all()
 # debug = True
 loglevel = 'info'
 bind = "0.0.0.0:8080"
-pidfile = "log/gunicorn.pid"
-accesslog = "log/access.log"
-errorlog = "log/debug.log"
+pidfile = "logs/gunicorn.pid"
+accesslog = "logs/access.log"
+errorlog = "logs/debug.log"
 # daemon = True
 
 # 启动的进程数

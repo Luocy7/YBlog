@@ -45,7 +45,7 @@ class CategoryForm(FlaskForm):
     submit = SubmitField()
 
     @staticmethod
-    def validate_name(self, field):
+    def validate_name(field):
         if Category.query.filter_by(name=field.data).first():
             raise ValidationError('Name already in use.')
 

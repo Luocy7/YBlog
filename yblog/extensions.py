@@ -1,4 +1,9 @@
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 _*-
+"""
+    @author: Luocy
+    @time: 2020/03/29
+    @copyright: © 2020 Luocy <luocy77@gmail.com>
+"""
 
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -6,7 +11,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_migrate import Migrate
 from flask_misaka import Misaka
-from flask_redis import FlaskRedis
 from flask_caching import Cache
 from flask_wtf.csrf import CSRFProtect
 
@@ -17,7 +21,6 @@ login_manager = LoginManager()
 csrf = CSRFProtect()
 migrate = Migrate()
 md = Misaka(fenced_code=True, autolink=True, highlight=True, math=True)
-redis_client = FlaskRedis()
 cache = Cache()
 
 

@@ -15,8 +15,6 @@ import hmac
 
 from flask import request, current_app
 
-# from yblog.task import save2log, save2redis
-
 COOKIE_NAME = 'analytics'
 COOKIE_DURATION = timedelta(days=1)
 

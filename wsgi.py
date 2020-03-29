@@ -1,3 +1,10 @@
+# -*- coding:utf-8 _*-
+"""
+    @author: Luocy
+    @time: 2020/03/29
+    @copyright: © 2020 Luocy <luocy77@gmail.com>
+"""
+
 import os
 from dotenv import load_dotenv
 
@@ -10,4 +17,4 @@ from yblog import create_app
 app = create_app('prd')
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(port=8080)

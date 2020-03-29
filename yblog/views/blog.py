@@ -1,7 +1,14 @@
+# -*- coding:utf-8 _*-
+"""
+    @author: Luocy
+    @time: 2020/03/17
+    @copyright: © 2020 Luocy <luocy77@gmail.com>
+"""
+
 from flask import Blueprint
 from flask import render_template, request, current_app, abort
 
-# from yblog.extensions import cache
+from yblog.extensions import cache
 from yblog.common.models import Tag, Post, Category
 from collections import OrderedDict
 
@@ -9,7 +16,7 @@ blog_bp = Blueprint('blog', __name__)
 
 
 @blog_bp.route("/", methods=['GET'])
-# @cache.cached(query_string=True)
+@cache.cached(query_string=True)
 def index():
     page = request.args.get('page', 1, type=int)
     pagination = Post.query.order_by(Post.created.desc()).paginate(
@@ -22,7 +29,7 @@ def index():
 
 
 @blog_bp.route("/archives", methods=['GET'])
-# @cache.cached()
+@cache.cached()
 def archives():
     posts = Post.query.order_by(Post.created.desc())
     archive_dict = group_posts_by_date(posts)
@@ -41,13 +48,13 @@ def group_posts_by_date(posts):
 
 
 @blog_bp.route("/about", methods=['GET'])
-# @cache.cached()
+@cache.cached()
 def about():
     return render_template('about.html')
 
 
 @blog_bp.route("/category/<string:cate>", methods=["GET"])
-# @cache.cached(query_string=True)
+@cache.cached(query_string=True)
 def category(cate):
     page = request.args.get('page', 1, type=int)
     cate = Category.query.filter(Category.name == cate).first()
@@ -66,7 +73,7 @@ def category(cate):
 
 
 @blog_bp.route("/tag/<string:tag>", methods=["GET"])
-# @cache.cached(query_string=True)
+@cache.cached(query_string=True)
 def show_tag(tag):
     page = request.args.get('page', 1, type=int)
     tag = Tag.query.filter(Tag.name == tag).first()
@@ -85,7 +92,7 @@ def show_tag(tag):
 
 
 @blog_bp.route("/post/<int:postid>", methods=['GET'])
-# @cache.cached()
+@cache.cached()
 def show_post(postid):
     p = Post.query.get_or_404(postid)
     return render_template('post.html',

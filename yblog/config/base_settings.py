@@ -1,4 +1,9 @@
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 _*-
+"""
+    @author: Luocy
+    @time: 2020/03/17
+    @copyright: © 2020 Luocy <luocy77@gmail.com>
+"""
 
 import os
 
@@ -24,7 +29,7 @@ class Config(YblogCfg):
     TESTING = False
 
     # Database Setting
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'fjdljLJDL08_80jflKzcznv*c'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'ajdljLJDL08_80jflKdcznv4c'
 
     REDIS_URL = os.environ.get('DEV_REDIS_URL',
                                'redis://192.168.235.129:6379/0')
@@ -37,7 +42,7 @@ class Config(YblogCfg):
     # Cache Setting
     CACHE_TYPE = 'redis'
     CACHE_DEFAULT_TIMEOUT = 300
-    CACHE_REDIS_URL = os.environ.get('CACHE_REDIS_URL',
+    CACHE_REDIS_URL = os.environ.get('DEV_CACHE_REDIS_URL',
                                      'redis://192.168.235.129:6379/1')
 
     # Mail Server Setting
@@ -57,9 +62,13 @@ class PrdConfig(Config):
     DEBUG = os.environ.get('DEBUG', 'false').lower() == 'true'
 
     REDIS_URL = os.environ.get('PRD_REDIS_URL',
-                               'redis://192.168.235.129:6379/0')
+                               'redis://localhost:6379/0')
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get('PRD_DATABASE_URL')
+    CACHE_REDIS_URL = os.environ.get('PRD_CACHE_REDIS_URL',
+                                     'redis://localhost:6379/1')
+
+    SQLALCHEMY_DATABASE_URI = os.environ.get('PRD_DATABASE_URL',
+                                             'mysql+pymysql://luocy:luocy@localhost:3306/Yblog?charset=utf8mb4')
 
 
 class TestingConfig(Config):
@@ -71,6 +80,5 @@ class TestingConfig(Config):
 config = {
     'dev': DevConfig,
     'prd': PrdConfig,
-    'testing': TestingConfig,
-    'default': DevConfig,
+    'testing': TestingConfig
 }

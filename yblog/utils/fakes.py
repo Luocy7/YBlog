@@ -1,4 +1,9 @@
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 _*-
+"""
+    @author: Luocy
+    @time: 2020/03/17
+    @copyright: © 2020 Luocy <luocy77@gmail.com>
+"""
 
 import random
 
