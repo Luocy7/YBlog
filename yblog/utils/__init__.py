@@ -32,6 +32,7 @@ def redirect_back(default='blog.index', **kwargs):
 def str_thismonth():
     return datetime.now().strftime("%Y%m")
 
+
 def str_thisday():
     return datetime.now().strftime("%Y%m%d")
 

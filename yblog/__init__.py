@@ -8,7 +8,7 @@ from logging.handlers import SMTPHandler, RotatingFileHandler
 
 from celery import Celery
 
-from flask import Flask, render_template, has_request_context, request
+from flask import Flask, render_template, has_request_context, request, redirect, url_for
 from flask_sqlalchemy import get_debug_queries
 
 from yblog.views.blog import blog_bp
@@ -115,7 +115,11 @@ def register_extensions(app):
 
 
 def register_blueprints(app):
-    app.register_blueprint(blog_bp)
+    @app.route("/")
+    def index():
+        return redirect(url_for("blog.index"), code=301)
+
+    app.register_blueprint(blog_bp, url_prefix='/blog')
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(admin_bp, url_prefix='/admin')
 
