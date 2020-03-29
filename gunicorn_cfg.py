@@ -14,11 +14,12 @@ gevent.monkey.patch_all()
 loglevel = 'info'
 bind = "0.0.0.0:8080"
 pidfile = "logs/gunicorn.pid"
-accesslog = "logs/access.log"
-errorlog = "logs/debug.log"
+accesslog = "-"
+errorlog = "-"
+
+access_log_format = '%({x-forwarded-for}i)s %(l)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 # daemon = True
 
-# 启动的进程数
-workers = multiprocessing.cpu_count()
+workers = multiprocessing.cpu_count() * 2 + 1
 worker_class = 'gevent'
 x_forwarded_for_header = 'X-FORWARDED-FOR'
