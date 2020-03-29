@@ -15,7 +15,7 @@ from yblog.views.blog import blog_bp
 from yblog.views.auth import auth_bp
 from yblog.views.admin import admin_bp
 
-from yblog.extensions import bootstrap, db, login_manager, csrf, mail, moment, toolbar, \
+from yblog.extensions import db, login_manager, csrf, mail, toolbar, \
     migrate, md, redis_client, cache
 from yblog.common.models import Admin, Post, Category, Site, Link, Visit
 from yblog.config.base_settings import config
@@ -100,7 +100,6 @@ def register_logging(app):
 
 
 def register_extensions(app):
-    # bootstrap.init_app(app)
     # mail.init_app(app)
     # moment.init_app(app)
     # toolbar.init_app(app)
