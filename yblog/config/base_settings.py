@@ -56,7 +56,8 @@ class DevConfig(Config):
 class PrdConfig(Config):
     DEBUG = os.environ.get('DEBUG', 'false').lower() == 'true'
 
-    REDIS_URL = os.environ.get('PRD_REDIS_URL')
+    REDIS_URL = os.environ.get('PRD_REDIS_URL',
+                               'redis://192.168.235.129:6379/0')
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('PRD_DATABASE_URL')
 
