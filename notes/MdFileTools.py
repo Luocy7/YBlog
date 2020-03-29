@@ -3,7 +3,7 @@ import re
 from datetime import datetime, timedelta
 
 from yblog import db
-from yblog.common.models import Category, Post, Tag
+from yblog.database.models import Category, Post, Tag
 
 nt_folder = Path(__file__).parent.absolute()
 nt_input = nt_folder / 'input'

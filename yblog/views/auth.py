@@ -10,10 +10,10 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 from sqlalchemy import or_
 
-from yblog.common.forms import LoginForm
-from yblog.common.models import Admin
+from yblog.database.forms import LoginForm
+from yblog.database.models import Admin
 from yblog.utils import redirect_back
-from yblog.common.RestResponse import RestResponse
+from yblog.utils.RestResUtil import RestResponse
 
 auth_bp = Blueprint('auth', __name__)
 

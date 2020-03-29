@@ -9,7 +9,7 @@ import hmac
 import hashlib
 from flask import request, current_app, abort, jsonify
 from yblog.extensions import csrf
-from yblog.common.RestResponse import RestResponse
+from yblog.utils.RestResUtil import RestResponse
 
 
 @csrf.exempt

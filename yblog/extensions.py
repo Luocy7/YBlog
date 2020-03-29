@@ -26,7 +26,7 @@ cache = Cache()
 
 @login_manager.user_loader
 def load_user(user_id):
-    from yblog.common.models import Admin
+    from yblog.database.models import Admin
     user = Admin.query.get(int(user_id))
     return user
 

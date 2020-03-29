@@ -10,7 +10,7 @@ from wtforms import StringField, SubmitField, SelectField, TextAreaField,\
     ValidationError, BooleanField, PasswordField
 from wtforms.validators import DataRequired, Length, URL
 
-from yblog.common.models import Category
+from yblog.database.models import Category
 
 
 class LoginForm(FlaskForm):

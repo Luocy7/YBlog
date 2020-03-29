@@ -20,7 +20,7 @@ from yblog.views.admin import admin_bp
 from yblog.views.webhook import yblg_github_moniter
 
 from yblog.extensions import db, login_manager, csrf, mail, toolbar, migrate, md, cache
-from yblog.common.models import Admin, Post, Category, Site, Link, Visit
+from yblog.database.models import Admin, Post, Category, Site, Link, Visit
 from yblog.config.base_settings import config
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
@@ -97,7 +97,7 @@ def register_extensions(app):
     migrate.init_app(app, db)
     md.init_app(app)
     cache.init_app(app)
-    from yblog.utils.analytis import analytis
+    from yblog.utils.AnalytisUtil import analytis
     analytis.init_app(app)
 
 
@@ -197,7 +197,7 @@ def register_commands(app):
     @click.option('--tag', default=20, help='Quantity of tags, default is 20.')
     def forge(category, post, tag):
         """Generate fake data."""
-        from yblog.utils.fakes import fake_admin, fake_categories, fake_posts, fake_links, fake_tags
+        from yblog.database.fakes import fake_admin, fake_categories, fake_posts, fake_links, fake_tags
 
         db.drop_all()
         db.create_all()

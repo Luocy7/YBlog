@@ -11,7 +11,7 @@ from faker import Faker
 from sqlalchemy.exc import IntegrityError
 
 from yblog import db
-from yblog.common.models import Admin, Category, Post, Link, Tag
+from yblog.database.models import Admin, Category, Post, Link, Tag
 
 fake = Faker()
 

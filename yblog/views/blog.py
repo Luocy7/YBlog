@@ -9,7 +9,7 @@ from flask import Blueprint
 from flask import render_template, request, current_app, abort
 
 from yblog.extensions import cache
-from yblog.common.models import Tag, Post, Category
+from yblog.database.models import Tag, Post, Category
 from collections import OrderedDict
 
 blog_bp = Blueprint('blog', __name__)
