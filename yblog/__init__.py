@@ -11,6 +11,8 @@ import click
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 
+from celery import Celery, platforms
+
 from flask import Flask, render_template, has_request_context, request, redirect, url_for
 from flask_sqlalchemy import get_debug_queries
 
@@ -25,6 +27,7 @@ from yblog.config.base_settings import config
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 cfg = os.getenv('FLASK_CONFIG', 'dev')
+platforms.C_FORCE_ROOT = True
 
 
 def create_app(config_name=None):
@@ -44,7 +47,25 @@ def create_app(config_name=None):
     register_template_filter(app)
     register_template_context(app)
     register_request_handlers(app)
+    celery_instance = make_celery(app)
+
     return app
+
+
+def make_celery(app):
+    celery = Celery(__name__, broker=app.config['CELERY_BROKER_URL'])
+    celery.config_from_object('yblog.config.celery_cfg')
+    TaskBase = celery.Task
+
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
 
 
 def register_logging(app):
@@ -149,10 +170,12 @@ def register_template_context(app):
 def register_errors(app):
     @app.errorhandler(404)
     def page_not_found(e):
+        app.logger.error(e)
         return render_template('errors/404.html'), 404
 
     @app.errorhandler(500)
     def internal_server_error(e):
+        app.logger.error(e)
         return render_template('errors/500.html'), 500
 
 
