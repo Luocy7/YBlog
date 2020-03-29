@@ -7,4 +7,4 @@ if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
 
-app = create_app('default')
+app = create_app('prd')

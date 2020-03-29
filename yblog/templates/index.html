@@ -11,7 +11,7 @@
             <div class="post-list-item">
                 <div class="post-list-item-container">
                     <a class="item-thumb  bg-deepgrey" href="{{ url_for('.show_post', postid=post.id) }}"
-                       style="background-image:url({{ url_for('static', filename='img/rand/' + id2bg(post.id)) }});">
+                       style="background-image:url(https://img.luocy.top/yblog-{{ id2bg(post.id) }});">
                         <dir class="item-desc">{{ post.tags }}</dir>
                     </a>
                     <div class="item-slant reverse-slant &lt; bg-deepgrey"></div>

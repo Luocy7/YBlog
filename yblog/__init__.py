@@ -241,9 +241,9 @@ def register_commands(app):
         db.create_all()
 
         admin = Admin()
-        admin.user_name = 'luocy'
+        admin.user_name = 'Luocy'
         admin.email = 'luocy77@gmail.com'
-        admin.password = 'luocy'
+        admin.password = input("Please input Admin Password : ")
         db.session.add(admin)
         db.session.commit()
 
