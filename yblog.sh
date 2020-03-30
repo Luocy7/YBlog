@@ -8,7 +8,7 @@ env_args="-Xms128m -Xmx128m"
 
 show_help(){
     echo -e "\r\n\tWeclome using yblog"
-    echo -e "\r\nUsage: sh yblog.sh start|stop|reload|status|log"
+    echo -e "\r\nUsage: sh yblog.sh start|stop|restart|status|log|access|error"
     exit
 }
 
@@ -35,6 +35,12 @@ else
             ;;
         "log")
             tail -f logs/yblog.log
+            ;;
+        "access")
+            tail -f logs/yblog_access.log
+            ;;
+        "error")
+            tail -f logs/yblog_error.log
             ;;
     esac
 fi
