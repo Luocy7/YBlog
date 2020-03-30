@@ -7,6 +7,7 @@
 
 import hmac
 import hashlib
+import time
 from flask import request, current_app, abort, jsonify
 from yblog.extensions import csrf
 from yblog.utils.RestResUtil import RestResponse
@@ -25,7 +26,11 @@ def yblg_github_moniter():
         digest = hmac.new(github_webhook_secret,
                           request.data, hashlib.sha1).hexdigest()
         verify_signature = "sha1=" + digest
-        task = git_action.delay()
+
+        # celery test
+        for i in range(8):
+            current_app.logger.info('Webhook celery Job {} Start at:{}'.format(str(i).zfill(2), time.strftime('%H%M%S')))
+            task = git_action.delay(i)
 
         # Verify signature
         if not hmac.compare_digest(signature, verify_signature):

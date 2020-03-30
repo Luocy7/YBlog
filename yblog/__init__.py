@@ -23,13 +23,14 @@ from yblog.views.admin import admin_bp
 from yblog.extensions import db, login_manager, csrf, mail, toolbar, migrate, md, cache
 from yblog.database.models import Admin, Post, Category, Site, Link, Visit
 from yblog.config.base_settings import config
+from yblog.config.celery_cfg import broker_url
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 cfg = os.getenv('FLASK_CONFIG', 'dev')
 platforms.C_FORCE_ROOT = True
 
-celery = Celery(__name__, broker='')
-
+celery = Celery(__name__, broker=broker_url)
+celery.config_from_object('yblog.config.celery_cfg')
 
 def create_app(config_name=None):
     config_name = config_name or cfg
@@ -54,7 +55,6 @@ def create_app(config_name=None):
 
 
 def register_celery(app):
-    celery.config_from_object('yblog.config.celery_cfg')
 
     class ContextTask(celery.Task):
         def __call__(self, *args, **kwargs):

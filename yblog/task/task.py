@@ -11,6 +11,6 @@ from yblog import celery
 
 
 @celery.task
-def git_action():
-    time.sleep(3)
-    print('123')
+def git_action(i):
+    time.sleep(2)
+    print('--!!--Job {} Done at:{}'.format(str(i).zfill(2), time.strftime('%H%M%S')))
