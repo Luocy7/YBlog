@@ -23,14 +23,11 @@ from yblog.views.admin import admin_bp
 from yblog.extensions import db, login_manager, csrf, mail, toolbar, migrate, md, cache
 from yblog.database.models import Admin, Post, Category, Site, Link, Visit
 from yblog.config.base_settings import config
-from yblog.config.celery_cfg import broker_url
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 cfg = os.getenv('FLASK_CONFIG', 'dev')
 platforms.C_FORCE_ROOT = True
 
-celery = Celery(__name__, broker=broker_url)
-celery.config_from_object('yblog.config.celery_cfg')
 
 def create_app(config_name=None):
     config_name = config_name or cfg
@@ -39,10 +36,9 @@ def create_app(config_name=None):
 
     app.config.from_object(config[config_name])
 
-    register_celery(app)
     register_logging(app)
     register_extensions(app)
-    register_urlrule(app)
+    register_blueprints(app)
     register_commands(app)
     register_errors(app)
     reqister_ddl_events(app)
@@ -55,13 +51,19 @@ def create_app(config_name=None):
 
 
 def register_celery(app):
+    celery_instance = Celery()
+    celery_instance.config_from_object('yblog.config.celery_cfg')
 
-    class ContextTask(celery.Task):
+    class ContextTask(celery_instance.Task):
         def __call__(self, *args, **kwargs):
             with app.app_context():
                 return self.run(*args, **kwargs)
 
-    celery.Task = ContextTask
+    setattr(ContextTask, 'abstract', True)
+    setattr(celery_instance, 'Task', ContextTask)
+
+    # celery.Task = ContextTask
+    return celery_instance
 
 
 def register_logging(app):
@@ -114,21 +116,21 @@ def register_extensions(app):
     migrate.init_app(app, db)
     md.init_app(app)
     cache.init_app(app)
-    from yblog.utils.AnalytisUtil import analytis
-    analytis.init_app(app)
 
 
-def register_urlrule(app):
+def register_blueprints(app):
     @app.route("/")
     def index():
         return redirect(url_for("blog.index"), code=301)
 
-    from yblog.views.webhook import yblg_github_moniter
-    app.add_url_rule('/blog/yblg-github-moniter', view_func=yblg_github_moniter, methods=['POST'])
-
     app.register_blueprint(blog_bp, url_prefix='/blog')
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(admin_bp, url_prefix='/admin')
+
+
+def register_task_view(app):
+    from yblog.views.webhook import yblg_github_moniter
+    app.add_url_rule('/blog/yblg-github-moniter', view_func=yblg_github_moniter, methods=['POST'])
 
 
 def register_shell_context(app):

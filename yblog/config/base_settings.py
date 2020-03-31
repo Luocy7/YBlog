@@ -23,8 +23,6 @@ class YblogCfg(object):
     YBLOG_SLOW_QUERY_THRESHOLD = 1
     YBLOG_AUTO_INCREMENT_VALUE = 10086
 
-    GITHUB_WEBHOOK_SECRET = 'luocysocool'
-
 
 class Config(YblogCfg):
     DEBUG = False
@@ -46,6 +44,13 @@ class Config(YblogCfg):
     CACHE_DEFAULT_TIMEOUT = 300
     CACHE_REDIS_URL = os.environ.get('DEV_CACHE_REDIS_URL',
                                      'redis://192.168.235.129:6379/1')
+
+    # Celery Setting
+    CELERY_URL = ''
+
+    # GITHUB WEBHOOK SETTING
+    GITHUB_WEBHOOK_SECRET = 'luocysocool'
+    GIT_PULL_CMD = ''
 
     # Mail Server Setting
     MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.gmail.com'
