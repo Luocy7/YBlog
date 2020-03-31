@@ -7,8 +7,7 @@
 
 import hmac
 import hashlib
-import time
-from flask import request, current_app, abort, jsonify
+from flask import request, current_app, jsonify
 from yblog.extensions import csrf
 from yblog.utils.RestResUtil import RestResponse
 from yblog.task.task import git_status
@@ -19,7 +18,7 @@ def yblg_github_moniter():
     if request.method == 'POST':
         signature = request.headers.get("X-Hub-Signature")
         if not signature or not signature.startswith("sha1="):
-            abort(400, "X-Hub-Signature required")
+            return jsonify(RestResponse.fail(msg='X-Hub-Signature required!', code=400)), 400
 
         # Create local hash of payload
         github_webhook_secret = current_app.config['GITHUB_WEBHOOK_SECRET'].encode("utf-8")
@@ -33,16 +32,16 @@ def yblg_github_moniter():
 
         # Verify signature
         if not hmac.compare_digest(signature, verify_signature):
-            abort(400, "Invalid signature")
+            return jsonify(RestResponse.fail(msg='Invalid signature!', code=400)), 400
 
         request_data = request.get_json()
 
         # We are only interested in push events from the a certain repo
-        if request_data.get("repository", {}).get("name") != "YBlog":
-            return jsonify(RestResponse.ok(msg='Dont care!')), 200
+        if request_data.get("repository", {}).get("name") != "Notes":
+            return jsonify(RestResponse.fail(msg='Dont care!', code=200)), 200
 
         # todo celery task
         # http://flask.pocoo.org/docs/1.0/patterns/celery/
         return jsonify(RestResponse.ok(msg='Success', code=200))
     else:
-        abort(400)
+        return jsonify(RestResponse.fail(msg='Invalid method!', code=400)), 400

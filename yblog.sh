@@ -19,7 +19,7 @@ else
   fi
   case "$1" in
   "init")
-    celery -A yblog worker -l info
+    celery -A wsgi:celery worker -l info
     ;;
   "start")
     supervisorctl start yblog

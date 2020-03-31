@@ -50,10 +50,11 @@ class Config(YblogCfg):
 
     # GITHUB WEBHOOK SETTING
     GITHUB_WEBHOOK_SECRET = 'luocysocool'
-    GIT_PULL_CMD = ''
+    NOTE_ABS_PATH = os.environ.get('PRD_NOTE_PATH', 'D:\\Project\\Note')
+    GIT_CMD = 'cd {} &&cd &&git pull origin master'.format(NOTE_ABS_PATH)
 
     # Mail Server Setting
-    MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.gmail.com'
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', 465))
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'false').lower() == 'true'
     MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL', 'true').lower() == 'true'

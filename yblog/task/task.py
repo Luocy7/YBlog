@@ -4,6 +4,7 @@
     @time: 2020/03/30
     @copyright: © 2020 Luocy <luocy77@gmail.com>
 """
+
 import subprocess
 import time
 
@@ -19,17 +20,15 @@ def git_action(i):
 
 @celery.task
 def git_status():
-    cmd = ['cd', 'notes\\input', '&&cd', '&&git', 'status']
+    command = current_app.config['GIT_CMD']
+    cmd = command.split(' ') if command else ['cd', '&&git', 'status']
 
     ret = subprocess.run(cmd, shell=True, capture_output=True)
 
-    print(ret.stdout.decode('utf-8'))
-
     if ret.returncode == 0:
-        print('task success')
-        current_app.logger.info(ret.stdout.decode('utf-8'))
+        current_app.logger.info('task success\n'+ret.stdout.decode('utf-8'))
     else:
-        print('task fail')
+        current_app.logger.info('task fail\n'+ret.stderr.decode('utf-8'))
 
 
 if __name__ == '__main__':
