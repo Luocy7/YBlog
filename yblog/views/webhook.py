@@ -33,7 +33,7 @@ def yblg_github_moniter():
         request_data = request.get_json()
 
         # We are only interested in push events from the a certain repo
-        if request_data.get("repository", {}).get("name") != "Notes":
+        if request_data.get("repository", {}).get("name") != current_app.config['GITHUB_REPO_NAME']:
             return jsonify(RestResponse.fail(msg='Dont care!', code=200)), 200
 
         current_app.logger.info('Webhook celery Job  Start')

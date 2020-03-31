@@ -20,10 +20,12 @@ register_task_view(app)
 
 from yblog.utils.FileObserveUtil import run_with_thread
 
+notepath = app.config['NOTE_ABS_PATH']
+
 
 @app.before_first_request
 def run_fileobserver():
-    run_with_thread()
+    run_with_thread(notepath)
 
 
 if __name__ == '__main__':

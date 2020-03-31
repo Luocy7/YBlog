@@ -67,9 +67,8 @@ def run_watcher(path):
     observer.join()
 
 
-def run_with_thread():
-    path = "D:\\Project\\Notable\\notes"
-    watcher_thread = threading.Thread(target=run_watcher, args=(path,))
+def run_with_thread(notepath):
+    watcher_thread = threading.Thread(target=run_watcher, args=(notepath,))
     watcher_thread.start()
 
 
