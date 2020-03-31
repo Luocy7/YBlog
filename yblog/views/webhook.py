@@ -26,10 +26,6 @@ def yblg_github_moniter():
                           request.data, hashlib.sha1).hexdigest()
         verify_signature = "sha1=" + digest
 
-        # celery test
-        current_app.logger.info('Webhook celery Job  Start')
-        task = git_status.delay()
-
         # Verify signature
         if not hmac.compare_digest(signature, verify_signature):
             return jsonify(RestResponse.fail(msg='Invalid signature!', code=400)), 400
@@ -40,8 +36,9 @@ def yblg_github_moniter():
         if request_data.get("repository", {}).get("name") != "Notes":
             return jsonify(RestResponse.fail(msg='Dont care!', code=200)), 200
 
-        # todo celery task
-        # http://flask.pocoo.org/docs/1.0/patterns/celery/
+        current_app.logger.info('Webhook celery Job  Start')
+        task = git_status.delay()
+
         return jsonify(RestResponse.ok(msg='Success', code=200))
     else:
         return jsonify(RestResponse.fail(msg='Invalid method!', code=400)), 400
