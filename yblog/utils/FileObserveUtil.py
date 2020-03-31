@@ -54,23 +54,33 @@ handler = MyHandler()
 handler.start()
 
 
-def run_watcher(path):
+class Watcher(object):
+    _instance = None
 
-    observer = Observer()
-    observer.schedule(handler, path)
-    observer.start()
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
+    def __new__(cls, *args, **kw):
+        if cls._instance is None:
+            cls._instance = object.__new__(cls)
+        return cls._instance
 
+    def __init__(self, path):
+        self.path = path
 
-def run_with_thread(notepath):
-    watcher_thread = threading.Thread(target=run_watcher, args=(notepath,))
-    watcher_thread.start()
+    def run_watcher(self):
+        observer = Observer()
+        observer.schedule(handler, self.path)
+        observer.start()
+        try:
+            while True:
+                time.sleep(1)
+                print('watcher running')
+        except KeyboardInterrupt:
+            observer.stop()
+        observer.join()
+
+    def run_with_thread(self):
+        watcher_thread = threading.Thread(target=self.run_watcher)
+        watcher_thread.start()
 
 
 if __name__ == '__main__':
-    run_watcher('.')
+    pass

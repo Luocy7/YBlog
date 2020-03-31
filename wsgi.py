@@ -18,14 +18,15 @@ app = create_app('dev')
 celery = register_celery(app)
 register_task_view(app)
 
-from yblog.utils.FileObserveUtil import run_with_thread
+from yblog.utils.FileObserveUtil import Watcher
 
 notepath = app.config['NOTE_ABS_PATH']
 
 
 @app.before_first_request
 def run_fileobserver():
-    run_with_thread(notepath)
+    watcher = Watcher(notepath)
+    watcher.run_with_thread()
 
 
 if __name__ == '__main__':
