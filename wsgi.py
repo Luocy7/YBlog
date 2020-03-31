@@ -18,5 +18,13 @@ app = create_app('dev')
 celery = register_celery(app)
 register_task_view(app)
 
+from yblog.utils.FileObserveUtil import run_with_thread
+
+
+@app.before_first_request
+def run_fileobserver():
+    run_with_thread()
+
+
 if __name__ == '__main__':
     app.run(port=8080)
