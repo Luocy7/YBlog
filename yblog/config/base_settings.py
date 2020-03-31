@@ -51,7 +51,7 @@ class Config(YblogCfg):
     # GITHUB WEBHOOK SETTING
     GITHUB_WEBHOOK_SECRET = 'luocysocool'
     NOTE_ABS_PATH = os.environ.get('PRD_NOTE_PATH', 'D:\\Project\\Note')
-    GIT_CMD = 'cd {} &&cd &&git pull origin master'.format(NOTE_ABS_PATH)
+    GIT_CMD = ['git pull origin master']
 
     # Mail Server Setting
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
