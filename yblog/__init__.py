@@ -25,7 +25,7 @@ from yblog.database.models import Admin, Post, Category, Site, Link, Visit
 from yblog.config.base_settings import config
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-cfg = os.getenv('FLASK_CONFIG', 'dev')
+cfg = os.getenv('FLASK_CONFIG', 'prd')
 platforms.C_FORCE_ROOT = True
 
 
@@ -245,7 +245,7 @@ def register_commands(app):
     @click.option('--drop', is_flag=True, help='Create after drop.')
     def inject(drop):
         """inject data into database."""
-        from notes.MdFileTools import insert_cate, insert_tag, insert_blogs
+        from yblog.database.MdFileTools import insert_cate, insert_tag, insert_blogs
 
         if drop:
             click.confirm('This operation will delete the database, do you want to continue?', abort=True)

@@ -18,3 +18,4 @@ pymysql==0.9.3
 gevent==1.4.0
 gunicorn
 celery==4.4.1
+requests

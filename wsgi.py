@@ -14,20 +14,9 @@ if os.path.exists(dotenv_path):
 
 from yblog import create_app, register_celery, register_task_view
 
-app = create_app('dev')
+app = create_app()
 celery = register_celery(app)
 register_task_view(app)
-
-from yblog.utils.FileObserveUtil import Watcher
-
-notepath = app.config['NOTE_ABS_PATH']
-
-
-@app.before_first_request
-def run_fileobserver():
-    watcher = Watcher(notepath)
-    watcher.run_with_thread()
-
 
 if __name__ == '__main__':
     app.run(port=8080)
