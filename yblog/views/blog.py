@@ -19,7 +19,7 @@ blog_bp = Blueprint('blog', __name__)
 @cache.cached(query_string=True)
 def index():
     page = request.args.get('page', 1, type=int)
-    pagination = Post.query.order_by(Post.created.desc()).paginate(
+    pagination = Post.query.filter(Post.is_published == True).order_by(Post.created.desc()).paginate(
         page, per_page=current_app.config['YBLOG_PER_PAGE'], error_out=True)
     posts = pagination.items
     return render_template('index.html',

@@ -8,15 +8,15 @@ class MdFile(object):
     def __init__(self, mdfile: str):
         self.mdpath = Path(mdfile)
         self.file_name = self.mdpath.stem
-        self.file_content = None
+        self.file_content = ''
 
-        self.head_data = ''
+        self.head_data = []
         self.title = ''
         self.tags = []
         self.created = None
         self.modified = None
 
-        self.content = None
+        self.content = ''
         self.read_file()
 
     def to_dict(self):
@@ -34,21 +34,21 @@ class MdFile(object):
             self.file_content = f.readlines()
 
     def divided_head(self):
-        self.head_data = []
-        _tmp = [_line.strip() for _line in self.file_content[0:10]]
-        line = _tmp.pop(0)
-        if line == "---":
-            index = 1
-            while _tmp:
-                line = _tmp.pop(0)
-                index += 1
-                if line == "---":
-                    self.head_data = [meta.strip() for meta in self.file_content[1:index - 1] if meta.strip()]
-                    self.content = "".join(self.file_content[index:])
-                    break
-            pass
-        else:
-            pass
+        try:
+            _tmp = [_line.strip() for _line in self.file_content[0:10]]
+            line = _tmp.pop(0)
+            if line == "---":
+                index = 1
+                while _tmp:
+                    line = _tmp.pop(0)
+                    index += 1
+                    if line == "---":
+                        self.head_data = [meta.strip() for meta in self.file_content[1:index - 1] if meta.strip()]
+                        self.content = "".join(self.file_content[index:])
+                        break
+                return 1
+        except IndexError:
+            return
 
     def parse_head(self):
         for line in self.head_data:

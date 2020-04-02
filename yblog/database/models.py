@@ -80,11 +80,11 @@ class Tag(db.Model):
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
+    mdname = db.Column(db.String(255), unique=True, info='MdName', index=True)
     title = db.Column(db.String(255), unique=True, info='Title')
-    slug = db.Column(db.String(255), default='', info='Slug')
     cover_link = db.Column(db.String(255), default='', info='Post Cover Link')
 
-    content = db.Column(db.String(64000), info='Post Content')
+    content = db.Column(db.TEXT(64000), info='Post Content')
     created = db.Column(db.DateTime(), default=datetime.now, info='Post Created Time')
     modified = db.Column(db.DateTime(), default=datetime.now, onupdate=datetime.now, info='Post Last Modified Time')
 
@@ -99,6 +99,9 @@ class Post(db.Model):
 
     def __repr__(self):
         return self.title
+
+    def __str__(self):
+        return self.__repr__()
 
 
 class PostDayView(db.Model):

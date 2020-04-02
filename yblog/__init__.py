@@ -16,13 +16,14 @@ from celery import Celery, platforms
 from flask import Flask, render_template, has_request_context, request, redirect, url_for
 from flask_sqlalchemy import get_debug_queries
 
-from yblog.views.blog import blog_bp
-from yblog.views.auth import auth_bp
-from yblog.views.admin import admin_bp
-
 from yblog.extensions import db, login_manager, csrf, mail, toolbar, migrate, md, cache
 from yblog.database.models import Admin, Post, Category, Site, Link, Visit
 from yblog.config.base_settings import config
+
+from yblog.views.blog import blog_bp
+from yblog.views.auth import auth_bp
+from yblog.views.admin import admin_bp
+from yblog.views.post_manage import post_manage
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 cfg = os.getenv('FLASK_CONFIG', 'prd')
@@ -39,6 +40,7 @@ def create_app(config_name=None):
     register_logging(app)
     register_extensions(app)
     register_blueprints(app)
+    register_views(app)
     register_commands(app)
     register_errors(app)
     reqister_ddl_events(app)
@@ -62,7 +64,6 @@ def register_celery(app):
     setattr(ContextTask, 'abstract', True)
     setattr(celery_instance, 'Task', ContextTask)
 
-    # celery.Task = ContextTask
     return celery_instance
 
 
@@ -128,9 +129,8 @@ def register_blueprints(app):
     app.register_blueprint(admin_bp, url_prefix='/admin')
 
 
-def register_task_view(app):
-    from yblog.views.webhook import yblg_github_moniter
-    app.add_url_rule('/blog/yblg-github-moniter', view_func=yblg_github_moniter, methods=['POST'])
+def register_views(app):
+    app.add_url_rule('/post/manage', view_func=post_manage, methods=['POST'])
 
 
 def register_shell_context(app):
@@ -204,67 +204,24 @@ def reqister_ddl_events(app):
 def register_commands(app):
     @app.cli.command()
     @click.option('--drop', is_flag=True, help='Create after drop.')
-    def initdb(drop):
+    def updatedb(drop):
         """Initialize the database."""
         if drop:
             click.confirm('This operation will delete the database, do you want to continue?', abort=True)
             db.drop_all()
-            click.echo('Drop tables.')
+            click.echo('--> Drop tables.')
         db.create_all()
-        click.echo('Initialized database.')
+        click.echo('--> Database initialized !\nStart update data')
 
-    @app.cli.command()
-    @click.option('--category', default=10, help='Quantity of categories, default is 10.')
-    @click.option('--post', default=50, help='Quantity of posts, default is 50.')
-    @click.option('--tag', default=20, help='Quantity of tags, default is 20.')
-    def forge(category, post, tag):
-        """Generate fake data."""
-        from yblog.database.fakes import fake_admin, fake_categories, fake_posts, fake_links, fake_tags
+        from yblog.database.initDB import create_default_user, create_default_cate, update_posts_from_folder
+        path = 'D:\\Project\\Notable\\notes'
+        username = 'Luocy'
+        password = 'Luocy'
 
-        db.drop_all()
-        db.create_all()
-
-        click.echo('Generating the administrator...')
-        fake_admin()
-
-        click.echo('Generating %d categories...' % category)
-        fake_categories(category)
-
-        click.echo('Generating %d tags...' % tag)
-        fake_tags(tag)
-
-        click.echo('Generating %d posts...' % post)
-        fake_posts(post)
-
-        click.echo('Generating links...')
-        fake_links()
-
-        click.echo('Done.')
-
-    @app.cli.command()
-    @click.option('--drop', is_flag=True, help='Create after drop.')
-    def inject(drop):
-        """inject data into database."""
-        from yblog.database.MdFileTools import insert_cate, insert_tag, insert_blogs
-
-        if drop:
-            click.confirm('This operation will delete the database, do you want to continue?', abort=True)
-            db.drop_all()
-            click.echo('Drop tables.')
-
-        db.create_all()
-
-        admin = Admin()
-        admin.user_name = 'Luocy'
-        admin.email = 'luocy77@gmail.com'
-        admin.password = input("Please input Admin Password : ")
-        db.session.add(admin)
-        db.session.commit()
-
-        click.echo('Start inject Categories')
-        insert_cate()
-        click.echo('Start inject Tags')
-        insert_tag()
-        click.echo('Start inject Blogs')
-        insert_blogs()
-        click.echo('Inject Done!')
+        click.echo('--> Start create default user')
+        create_default_user(username, password)
+        click.echo('--> Create default user success !\n--> Start create default category')
+        create_default_cate()
+        click.echo('--> Create default category success !\n--> Start update posts')
+        update_posts_from_folder(path)
+        click.echo('--> Update posts success')

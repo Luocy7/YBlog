@@ -16,7 +16,7 @@ from flask_wtf.csrf import CSRFProtect
 
 toolbar = DebugToolbarExtension()
 mail = Mail()
-db = SQLAlchemy()
+db = SQLAlchemy(session_options={'autoflush': False})
 login_manager = LoginManager()
 csrf = CSRFProtect()
 migrate = Migrate()

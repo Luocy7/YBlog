@@ -22,16 +22,16 @@ else
     celery -A wsgi:celery worker -l info
     ;;
   "start")
-    supervisorctl start yblog
+    sudo supervisorctl start yblog
     ;;
   "stop")
-    supervisorctl stop yblog
+    sudo supervisorctl stop yblog
     ;;
   "restart")
-    supervisorctl restart yblog
+    sudo supervisorctl restart yblog
     ;;
   "status")
-    supervisorctl status yblog
+    sudo supervisorctl status yblog
     ;;
   "log")
     tail -f /data/www/YBlog/logs/yblog.log

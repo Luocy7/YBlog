@@ -48,11 +48,7 @@ class Config(YblogCfg):
     # Celery Setting
     CELERY_URL = ''
 
-    # GITHUB WEBHOOK SETTING
-    GITHUB_REPO_NAME = os.environ.get('PRD_REPO_NAME', 'Notable')
-    GITHUB_WEBHOOK_SECRET = os.environ.get('PRD_WEBHOOK_SECRET', 'luocysocool')
     NOTE_ABS_PATH = os.environ.get('PRD_NOTE_PATH', 'D:\\Project\\Notable\\notes')
-    GIT_CMD = ['git pull origin master']
 
     # Mail Server Setting
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
