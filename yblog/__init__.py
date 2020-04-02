@@ -214,9 +214,9 @@ def register_commands(app):
         click.echo('--> Database initialized !\nStart update data')
 
         from yblog.database.initDB import create_default_user, create_default_cate, update_posts_from_folder
-        path = 'D:\\Project\\Notable\\notes'
-        username = 'Luocy'
-        password = 'Luocy'
+        path = app.config['NOTE_ABS_PATH']
+        username = app.config['YBLOG_ADMIN_USERNAME']
+        password = app.config['YBLOG_ADMIN_PASSWD']
 
         click.echo('--> Start create default user')
         create_default_user(username, password)

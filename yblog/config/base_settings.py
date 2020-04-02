@@ -23,6 +23,11 @@ class YblogCfg(object):
     YBLOG_SLOW_QUERY_THRESHOLD = 1
     YBLOG_AUTO_INCREMENT_VALUE = 10086
 
+    YBLOG_ADMIN_USERNAME = os.environ.get('PRD_ADMIN_USERNAME', 'Luocy')
+    YBLOG_ADMIN_PASSWD = os.environ.get('PRD_ADMIN_PASSWD', 'Luocy')
+
+    NOTE_ABS_PATH = os.environ.get('PRD_NOTE_PATH', 'D:\\Project\\Notable\\notes')
+
 
 class Config(YblogCfg):
     DEBUG = False
@@ -44,11 +49,6 @@ class Config(YblogCfg):
     CACHE_DEFAULT_TIMEOUT = 300
     CACHE_REDIS_URL = os.environ.get('DEV_CACHE_REDIS_URL',
                                      'redis://192.168.235.129:6379/1')
-
-    # Celery Setting
-    CELERY_URL = ''
-
-    NOTE_ABS_PATH = os.environ.get('PRD_NOTE_PATH', 'D:\\Project\\Notable\\notes')
 
     # Mail Server Setting
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
@@ -72,8 +72,7 @@ class PrdConfig(Config):
     CACHE_REDIS_URL = os.environ.get('PRD_CACHE_REDIS_URL',
                                      'redis://localhost:6379/1')
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get('PRD_DATABASE_URL',
-                                             'mysql+pymysql://luocy:luocy@localhost:3306/Yblog?charset=utf8mb4')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('PRD_DATABASE_URL')
 
 
 class TestingConfig(Config):
