@@ -13,10 +13,10 @@ from logging.handlers import SMTPHandler, RotatingFileHandler
 
 from celery import Celery, platforms
 
-from flask import Flask, render_template, has_request_context, request, redirect, url_for
+from flask import Flask, render_template, has_request_context, request, redirect, url_for, jsonify
 from flask_sqlalchemy import get_debug_queries
 
-from yblog.extensions import db, login_manager, csrf, mail, toolbar, migrate, md, cache
+from yblog.extensions import db, login_manager, csrf, mail, toolbar, migrate, md, cache, limiter
 from yblog.database.models import Admin, Post, Category, Site, Link, Visit
 from yblog.config.base_settings import config
 
@@ -24,6 +24,8 @@ from yblog.views.blog import blog_bp
 from yblog.views.auth import auth_bp
 from yblog.views.admin import admin_bp
 from yblog.views.post_manage import post_manage
+
+from yblog.utils.RestResUtil import RestResponse
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 cfg = os.getenv('FLASK_CONFIG', 'prd')
@@ -116,6 +118,7 @@ def register_extensions(app):
     migrate.init_app(app, db)
     md.init_app(app)
     cache.init_app(app)
+    limiter.init_app(app)
 
 
 def register_blueprints(app):
@@ -168,12 +171,17 @@ def register_template_context(app):
 def register_errors(app):
     @app.errorhandler(404)
     def page_not_found(e):
-        app.logger.error(e)
+        app.logger.warning(e)
         return render_template('errors/404.html'), 404
+
+    @app.errorhandler(429)
+    def page_not_found(e):
+        app.logger.warning(e)
+        return render_template('errors/429.html'), 429
 
     @app.errorhandler(500)
     def internal_server_error(e):
-        app.logger.error(e)
+        app.logger.warning(e)
         return render_template('errors/500.html'), 500
 
 

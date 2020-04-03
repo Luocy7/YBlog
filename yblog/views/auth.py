@@ -14,11 +14,13 @@ from yblog.database.forms import LoginForm
 from yblog.database.models import Admin
 from yblog.utils import redirect_back
 from yblog.utils.RestResUtil import RestResponse
+from yblog.extensions import limiter
 
 auth_bp = Blueprint('auth', __name__)
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
+@limiter.limit("20/day;10/hour;5/minute")
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('blog.index'))
@@ -37,9 +39,7 @@ def login():
                     and admin.verify_password(password):
                 login_user(admin, remember)
                 return jsonify(RestResponse.ok(msg='Login Success'))
-            return jsonify(RestResponse.fail(msg='密码错误'))
-        else:
-            return jsonify(RestResponse.fail(msg='不存在该用户'))
+        return jsonify(RestResponse.fail(msg='请输入正确的用户名和密码'))
     return render_template('admin/login.html')
 
 

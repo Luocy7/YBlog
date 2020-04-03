@@ -8,7 +8,7 @@
 from flask import Blueprint
 from flask import render_template, request, current_app, abort
 
-# from yblog.extensions import cache
+from yblog.extensions import cache, limiter
 from yblog.database.models import Tag, Post, Category
 from collections import OrderedDict
 
@@ -48,7 +48,7 @@ def group_posts_by_date(posts):
 
 
 @blog_bp.route("/about", methods=['GET'])
-# @cache.cached()
+@cache.cached()
 def about():
     return render_template('about.html')
 

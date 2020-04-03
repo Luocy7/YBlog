@@ -14,8 +14,10 @@ from yblog.extensions import cache, csrf
 @csrf.exempt
 def post_manage():
     # todo :auth
-    if request.remote_addr not in ['127.0.0.1', 'localhost']:
-        return jsonify(RestResponse.fail(msg='Invalid request!', code=400)), 400
+    x_real_ip = request.headers.get('X-Real-IP', '')
+    x_forwarder_for = request.headers.get('X-Forwarded-For', '')
+    if x_real_ip or x_forwarder_for:
+        return jsonify(RestResponse.fail(msg='Invalid Request!', code=400)), 400
 
     signature = request.headers.get("YBlog-Signature")
     if not signature or not signature.startswith("luocy"):
