@@ -14,22 +14,27 @@ from yblog.extensions import cache, csrf
 @csrf.exempt
 def post_manage():
     # todo :auth
+    if request.remote_addr not in ['127.0.0.1', 'localhost']:
+        return jsonify(RestResponse.fail(msg='Invalid request!', code=400)), 400
+
     signature = request.headers.get("YBlog-Signature")
     if not signature or not signature.startswith("luocy"):
-        return jsonify(RestResponse.fail(msg='Invalid data!', code=400)), 400
+        return jsonify(RestResponse.fail(msg='Invalid request!', code=400)), 400
 
     request_data = request.get_json()
 
     if not request_data:
         return jsonify(RestResponse.fail(msg='Invalid data!', code=400)), 400
 
+    for k, v in request_data.items():
+        if isinstance(request_data[k], str):
+            request_data[k] = v.strip()
+
     try:
         method = request_data['method']
         md_name = request_data['md_name']
     except KeyError:
         return jsonify(RestResponse.fail(msg='Invalid data!', code=400)), 400
-
-    dest_name = request_data.get('dest_name', '')
 
     if method == 'created':
         try:
@@ -56,6 +61,7 @@ def post_manage():
         return jsonify(RestResponse.ok(msg=msg, code=200))
 
     elif method == 'moved':
+        dest_name = request_data.get('dest_name', '')
         try:
             change_postname_with_data(request_data)
         except DBError as e:

@@ -102,9 +102,8 @@ def register_logging(app):
     mail_handler.setLevel(logging.ERROR)
     mail_handler.setFormatter(request_formatter)
 
-    if not app.debug:
-        app.logger.addHandler(mail_handler)
-        app.logger.addHandler(file_handler)
+    # if not app.debug:
+    #     app.logger.addHandler(mail_handler)
     app.logger.addHandler(file_handler)
 
 

@@ -19,7 +19,8 @@ class DBError(Exception):
         return self.errorinfo
 
 
-def get_or_create_cate_by_name(catename):
+def get_or_create_cate_by_name(catename: str):
+    catename = catename.strip()
     _category = Category.query.filter(Category.name == catename).first()
     if not _category:
         try:
@@ -34,7 +35,8 @@ def get_or_create_cate_by_name(catename):
     return _category
 
 
-def get_or_create_tag_by_name(tagname):
+def get_or_create_tag_by_name(tagname: str):
+    tagname = tagname.strip()
     _tag = Tag.query.filter(Tag.name == tagname).first()
     if not _tag:
         try:
@@ -49,7 +51,7 @@ def get_or_create_tag_by_name(tagname):
 
 
 def create_post_by_name(data: dict):
-    post_name = data.get('md_name')
+    post_name = data.get('md_name').strip()
     try:
         post = Post(
             mdname=post_name,
@@ -83,12 +85,12 @@ def update_post_by_name(data: dict):
             tags = data.get('md_tags', '')
             if tags:
                 for tag in tags:
-                    _tag = get_or_create_tag_by_name(tag)
+                    _tag = get_or_create_tag_by_name(tag.strip())
                     post.tags.append(_tag)
 
             db.session.add(post)
             db.session.commit()
-        except IntegrityError as e:
+        except IntegrityError:
             name = data.get('md_name')
             title = data.get('md_title')
             db.session.rollback()
@@ -108,7 +110,7 @@ def update_or_create_post_with_data(data: dict):
         tags = data.get('md_tags', '')
         if tags:
             for tag in tags:
-                _tag = get_or_create_tag_by_name(tag)
+                _tag = get_or_create_tag_by_name(tag.strip())
                 post.tags.append(_tag)
 
         db.session.add(post)

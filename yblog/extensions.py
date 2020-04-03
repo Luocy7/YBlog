@@ -20,7 +20,7 @@ db = SQLAlchemy(session_options={'autoflush': False})
 login_manager = LoginManager()
 csrf = CSRFProtect()
 migrate = Migrate()
-md = Misaka(fenced_code=True, autolink=True, highlight=True, math=True)
+md = Misaka(fenced_code=True, autolink=True, highlight=True, math=True, html=False, tables=True)
 cache = Cache()
 
 
@@ -31,7 +31,5 @@ def load_user(user_id):
     return user
 
 
-login_manager.login_message_category = 'warning'
 login_manager.session_protection = 'basic'
 login_manager.login_view = 'auth.login'
-login_manager.login_message = '请登录后访问该页面'
