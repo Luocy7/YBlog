@@ -26,6 +26,7 @@ from yblog.views.admin import admin_bp
 from yblog.views.post_manage import post_manage
 
 from yblog.utils.RestResUtil import RestResponse
+from yblog.utils.Md2HtmlUtil import m
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 cfg = os.getenv('FLASK_CONFIG', 'prd')
@@ -151,6 +152,10 @@ def register_template_filter(app):
         icons = ["bg-ico-book", "bg-ico-game", "bg-ico-note", "bg-ico-chat", "bg-ico-code", "bg-ico-image",
                  "bg-ico-web", "bg-ico-link", "bg-ico-design", "bg-ico-lock"]
         return icons[int(s) % len(icons)]
+
+    @app.template_filter()
+    def toc(s):
+        return m.ge_toc(s)
 
 
 def register_template_context(app):

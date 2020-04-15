@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit"/>
+    <title>
+        {% block title %}
+        {% endblock title %}
+    </title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}"/>
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='new/css/ionicons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='new/css/iconfont.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='new/css/my.css') }}">
+    <script src="//cdn.bootcss.com/jquery/2.2.3/jquery.min.js"></script>
+    {% block headscript %}
+    {% endblock headscript %}
+
+</head>
+<body>
+
+<div id="yblog">
+    <div class="global-component-box">
+        <div class="suspension-panel">
+            <button title="回到顶部" class="btn to-top-btn">
+                <i class="ion-android-arrow-dropup"></i>
+            </button>
+        </div>
+    </div>
+    <div class="view-container">
+        {% include "new/header.html" %}
+        {% block content %}
+        {% endblock content %}
+    </div>
+</div>
+<script async src="{{ url_for('static', filename='new/js/main.js') }}"></script>
+{% block footscript %}
+{% endblock footscript %}
+</body>
+</html>
+

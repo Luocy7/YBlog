@@ -489,7 +489,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 
 .navbar-mobile-menu {
-    line-height: 80px;
+    line-height: 60px;
     z-index: 1;
     display: none;
     width: 28px;
@@ -551,7 +551,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     top: 100%;
     overflow: hidden;
     clip: rect(1px, 1px, 1px, 1px);
-    margin: 0 0 0 -95px;
+    margin: 0 0 0 -35px;
     padding: 0;
     -webkit-transition: -webkit-transform .3s;
     transition: -webkit-transform .3s;
@@ -577,7 +577,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     font-size: 15px;
     line-height: 2.2;
     display: block;
-    width: 140px;
+    width: 80px;
     margin: 0;
     padding: 8px 25px;
     background-color: #eee
@@ -1438,7 +1438,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     /*position: relative;*/
     z-index: 0;
     margin-top: 0;
-    padding-bottom: 50px;
+    /*padding-bottom: 50px;*/
     background-color: #fff
 }
 
@@ -1464,7 +1464,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 
 .footer-meta {
-    padding: 50px 0 0;
+    padding: 30px 0 0;
     list-style: none
 }
 
@@ -1662,10 +1662,6 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
     .footer-meta .meta-item {
         width: 100%;
         padding: 0 10px
-    }
-
-    .footer-meta .meta-copyright .info-text {
-        float: left
     }
 
     .footer-meta .meta-copyright .info-text p {

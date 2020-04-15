@@ -97,3 +97,11 @@ def show_post(postid):
     p = Post.query.get_or_404(postid)
     return render_template('post.html',
                            post=p)
+
+
+@blog_bp.route("/p/<int:postid>", methods=['GET'])
+@limiter.exempt
+def show_article(postid):
+    p = Post.query.get_or_404(postid)
+    return render_template('new/post.html',
+                           post=p)
